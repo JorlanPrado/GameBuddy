@@ -23,7 +23,7 @@
         /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
         html {
             line-height: 1.15;
-            -webkit-text-size-adjust: 100%
+            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -395,6 +395,7 @@
         body {
             font-family: 'Nunito', sans-serif;
             overflow: hidden;
+            height: 100vh;
             background-image: url('/img/landingpagebg.jpg');
             background-size: cover;
             background-position: center;
@@ -439,6 +440,10 @@
         .custom-gradient {
             background: linear-gradient(to right, #ff0000, #00ff00, #0000ff);
         }
+
+        .background-color{
+            background-color: black;
+        }
     </style>
 </head>
 
@@ -468,7 +473,6 @@
                                                 Log In
                                             </button>
                                         </a>
-
                                         @if (Route::has('register'))
                                             <a href="{{ route('register') }}" class="ml-4 text-sm">
                                                 <button class="btn btn-outline-custom-danger btn-lg">Register

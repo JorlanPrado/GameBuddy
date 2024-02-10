@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -16,8 +17,14 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        // Get the authenticated user
+        $user = Auth::user();
+        // Fetch the user's avatar
+        $selectedAvatar = $user->avatar;
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'selectedAvatar' => $selectedAvatar,
         ]);
     }
 
@@ -57,4 +64,31 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function updateAvatar(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'avatar' => 'required',],
+            ['avatar.required' => 'Please select an avatar image.', // Ensure 'avatar' field is required
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+    
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Update the user's avatar
+        $user->avatar = $request->avatar;
+        $user->save();
+
+        // Redirect back or to a specific route
+        return redirect()->back()->withSuccess('Avatar updated successfully.');
+    }
+    
 }
