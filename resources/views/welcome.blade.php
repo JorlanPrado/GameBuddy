@@ -465,8 +465,9 @@
                             @if (Route::has('login'))
                                 <div class="text-center px-4">
                                     @auth
-                                        <a href="{{ url('/dashboard') }}"
-                                            class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
+                                        <a href="{{ url('/dashboard') }}"><button class="btn login-custom-color btn-lg">
+                                            Lobby
+                                        </button></a>
                                     @else
                                         <a href="{{ route('login') }}" class="text-sm">
                                             <button class="btn login-custom-color btn-lg">
