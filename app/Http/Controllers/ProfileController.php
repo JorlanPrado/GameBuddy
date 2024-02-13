@@ -65,30 +65,30 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function updateAvatar(Request $request){
+    // public function updateAvatar(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'avatar' => 'required',],
-            ['avatar.required' => 'Please select an avatar image.', // Ensure 'avatar' field is required
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'avatar' => 'required',],
+    //         ['avatar.required' => 'Please select an avatar image.', // Ensure 'avatar' field is required
+    //     ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                        ->withErrors($validator)
-                        ->withInput();
-        }
+    //     if ($validator->fails()) {
+    //         return redirect()->back()
+    //                     ->withErrors($validator)
+    //                     ->withInput();
+    //     }
 
     
 
-        // Get the authenticated user
-        $user = Auth::user();
+    //     // Get the authenticated user
+    //     $user = Auth::user();
 
-        // Update the user's avatar
-        $user->avatar = $request->avatar;
-        $user->save();
+    //     // Update the user's avatar
+    //     $user->avatar = $request->avatar;
+    //     $user->save();
 
-        // Redirect back or to a specific route
-        return redirect()->back()->withSuccess('Avatar updated successfully.');
-    }
+    //     // Redirect back or to a specific route
+    //     return redirect()->back()->withSuccess('Avatar updated successfully.');
+    // }
     
 }
