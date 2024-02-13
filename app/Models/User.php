@@ -21,7 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'isAdmin',
         'avatar',
+    ];
+    protected $attributes = [
+        'avatar' => 'img/default_user_avatar.png'
     ];
 
     /**
@@ -42,4 +46,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function isAdmin()
+    {
+        return $this->isAdmin;
+    }
 }

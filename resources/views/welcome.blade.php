@@ -441,7 +441,7 @@
             background: linear-gradient(to right, #ff0000, #00ff00, #0000ff);
         }
 
-        .background-color{
+        .background-color {
             background-color: black;
         }
     </style>
@@ -463,24 +463,25 @@
                     <div class="nav-item">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-4 ">
                             @if (Route::has('login'))
-                                <div class="text-center px-4">
-                                    @auth
-                                        <a href="{{ url('/dashboard') }}"
-                                            class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-                                    @else
-                                        <a href="{{ route('login') }}" class="text-sm">
-                                            <button class="btn login-custom-color btn-lg">
-                                                Log In
-                                            </button>
-                                        </a>
-                                        @if (Route::has('register'))
-                                            <a href="{{ route('register') }}" class="ml-4 text-sm">
-                                                <button class="btn btn-outline-custom-danger btn-lg">Register
-                                                </button>
-                                            </a>
-                                        @endif
-                                    @endauth
-                                </div>
+                            <div class="text-center px-4">
+                                @auth
+                                <a href="{{ url('chatify') }}"><button class="btn login-custom-color btn-lg">
+                                        Lobby
+                                    </button></a>
+                                @else
+                                <a href="{{ route('login') }}" class="text-sm">
+                                    <button class="btn login-custom-color btn-lg">
+                                        Log In
+                                    </button>
+                                </a>
+                                @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="ml-4 text-sm">
+                                    <button class="btn btn-outline-custom-danger btn-lg">Register
+                                    </button>
+                                </a>
+                                @endif
+                                @endauth
+                            </div>
                             @endif
                         </ul>
                     </div>
