@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\Interest;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
@@ -15,22 +16,50 @@ class UserController extends Controller
         return User::all();
     }
 
-    public function add(Request $request){
+    public function add(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6',
+            'age' => 'required|integer|min:18',
+            'interests' => 'required|array|min:1|max:5',
+        ]);
+    
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'age' => $request->age,
+        ]);
+    
+        $interests = [];
 
-        $user = new User;
-        $user->name=$request->name;
-        $user->email=$request->email;
-        $user->password = Hash::make($request->password);
-        $registered= $user->save();
-        if($registered)
-        {
-            return ["Result"=>"New user has been saved"];
-        }
-        else{
-            return ["Result"=>"Failed"];
-        }
-        
+        foreach ($request->interests as $interest) {
+
+            $interestId = $interest['id'] ?? null;
+            
+            if (!$interestId) {
+                $newInterest = Interest::create(['name' => $interest['game']]);
+                $interestId = $newInterest->id;
     }
+
+    $interests[] = $interestId;
+}
+
+
+$user->interests()->attach($interests);
+    
+        return response()->json([
+            'status' => true,
+            'message' => 'User registered successfully',
+            'age' => $user->age,
+            'user' => $user,
+        ], 201);
+    }
+
+
+    //UPDATE------------------------------
 
     public function update(Request $request){
         $user = User::find($request->id);

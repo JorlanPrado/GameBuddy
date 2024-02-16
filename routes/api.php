@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
+use App\Http\Controllers\API\MatchController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,3 +38,6 @@ Route::delete('delete/{id}',[UserController::class, 'delete']);
 
 // save/validation method
 Route::post('save',[UserController::class, 'testData']);
+
+//Matching API
+Route::post("startmatching", [MatchController::class, "startMatching"]);

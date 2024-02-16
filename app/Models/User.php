@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'age',
         'isAdmin',
         'avatar',
     ];
@@ -51,5 +52,8 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->isAdmin;
+    }
+    public function interests(){
+        return $this->belongsToMany(Interest::class);
     }
 }

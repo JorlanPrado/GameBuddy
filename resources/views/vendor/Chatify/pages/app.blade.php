@@ -1,3 +1,16 @@
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/main.css" />
+
+
+
+
+
+
+
+
+
+
 @include('dashboard')
 @include('Chatify::layouts.headLinks')
 <div class="messenger">
@@ -31,6 +44,29 @@
                     <p class="messenger-title"><span>Favorites</span></p>
                     <div class="messenger-favorites app-scroll-hidden"></div>
                 </div>
+
+
+
+
+                
+        {{-- -------------------- MATCHING BUTTON -------------------- --}}
+                <div class="matchingButton" style="width: 100%;position: relative; right:-36%">
+                    <a href="#">
+                        <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#matchingModal">
+                            Start Matching
+
+                        </button>
+                    </a>
+                </div>
+
+              
+                       
+                        
+                        
+
+
+
+
                 {{-- Saved Messages --}}
                 <p class="messenger-title"><span>Your Space</span></p>
                 {!! view('Chatify::layouts.listItem', ['get' => 'saved']) !!}
