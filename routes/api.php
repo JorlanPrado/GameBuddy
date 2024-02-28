@@ -3,9 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
 use App\Http\Controllers\API\MatchController;
-
+use App\Http\Controllers\vendor\Chatify\Api\MessagesController;
+use App\Http\Controllers\API\ApiController;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,7 +16,9 @@ use App\Http\Controllers\API\MatchController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+
 */
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -41,3 +44,23 @@ Route::post('save',[UserController::class, 'testData']);
 
 //Matching API
 Route::post("startmatching", [MatchController::class, "startMatching"]);
+
+Route::post("login",[ApiController::class, "login"]);
+// jwt auth
+Route::group([
+    "middleware" => ["auth:api"]
+], function () {
+    Route::get("profile", [JWTAuthController::class, "profile"]);
+    Route::get("refresh", [JWTAuthController::class, "refreshToken"]);
+    Route::get("logout", [JWTAuthController::class, "logout"]);
+});
+
+
+//edit interest
+Route::put('update-interests/{userId}', [UserController::class, 'updateInterests']);
+
+
+//showAllUsers
+Route::get("showAllUsers", [MessagesController::class, "showAllUsers"]);
+Route::get("getContacts", [MessagesController::class, "getContacts"]);
+Route::get("search", [MessagesController::class, "search"]);

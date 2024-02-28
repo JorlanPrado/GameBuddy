@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Interest;
 use App\Models\ChMessage as Message;
 use App\Models\ChFavorite as Favorite;
 use Chatify\Facades\ChatifyMessenger as Chatify;
@@ -320,6 +322,135 @@ class MessagesController extends Controller
                 : 0,
         ], 200);
     }
+    
+    
+    
+    /**
+     * showAllUsers
+     *
+     * @param Request $request
+     * @return JsonResponse|void
+     */
+    public function showAllUsers(Request $request)
+    {
+        $getRecords = '';
+    
+        // Retrieve all users except admins and the authenticated user
+        $records = User::where('id', '!=', Auth::user()->id)
+                        ->where('isAdmin', 0) // Exclude admin accounts
+                        ->inRandomOrder()
+                        ->paginate($request->per_page ?? $this->perPage);
+    
+        foreach ($records->items() as $record) {
+            $getRecords .= view('Chatify::layouts.listItem', [
+                'get' => 'search_item',
+                'user' => Chatify::getUserWithAvatar($record),
+            ])->render();
+        }
+    
+        if ($records->total() < 1) {
+            $getRecords = '<p class="message-hint center-el"><span>Nothing to show.</span></p>';
+        }
+    
+        return $getRecords; // Return HTML content directly
+    }
+    
+
+    //STARTMATCHING------------------------------------------------------------------------------------------------------
+    public function startMatching(Request $request)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'age' => 'required|integer|min:18|max:100',
+            'interest' => 'required|array|min:1|max:5',
+            'gender' => 'required|in:male,female,others',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422); // Unprocessable Entity
+        }
+
+        // Retrieve interest IDs based on provided names
+        $interestIds = [];
+        foreach ($request->interest as $interestName) {
+            $interest = Interest::where('name', $interestName)->first();
+            if ($interest) {
+                $interestIds[] = $interest->id;
+            }
+        }
+
+        if (empty($interestIds)) {
+            return response()->json(['message' => 'No valid interests found'], 400); 
+        }
+
+        $matchingUsers = User::whereHas('interests', function ($query) use ($interestIds) {
+            $query->whereIn('interests.id', $interestIds);
+        })
+            ->where('users.age', $request->age) 
+            ->where('users.gender', $request->gender)
+            ->with('interests')
+            ->get();
+
+        
+        $responseData = null;
+
+        
+        if ($matchingUsers->isNotEmpty()) {
+            $randomIndex = random_int(0, $matchingUsers->count() - 1);
+            $matchingUser = $matchingUsers->get($randomIndex);
+        
+            // Calculate shared interests before filtering
+            $userInterests = $matchingUser->interests->pluck('name')->toArray();
+            $matchingUserInterests = $matchingUser->interests->pluck('name')->toArray(); 
+            $sharedInterests = array_intersect($userInterests, $matchingUserInterests);
+        
+            // Filter matched user interests based on shared interests
+            $filteredInterests = $matchingUser->interests->whereIn('name', $sharedInterests)->toArray();
+            
+        
+            $responseData = [
+                'message' => 'Matching user found',
+                'data' => [
+                    'matched_user' => [
+                        'id' => $matchingUser->id,
+                        'name' => $matchingUser->name,
+                        'age' => $matchingUser->age,
+                        'gender' => $matchingUser->gender,
+                        'interests' => $filteredInterests,
+                        'shared_interests' => $sharedInterests,
+                    ],
+                ],
+                
+            ];
+        } else {
+            $responseData = [
+                'message' => 'No matching user found',
+                'data' => [],
+            ];
+        }
+
+        return response()->json($responseData);
+    }
+    
+    public function showMatchUsers(Request $request, $matchedUserId)
+{
+    $getRecords = '';
+
+    // Retrieve the matched user
+    $matchedUser = User::find($matchedUserId);
+
+    if (!$matchedUser) {
+        return '<p class="message-hint center-el"><span>No matching user found.</span></p>';
+    }
+
+    // Render the view for the matched user
+    $getRecords .= view('Chatify::layouts.listItem', [
+        'get' => 'search_item',
+        'user' => Chatify::getUserWithAvatar($matchedUser),
+    ])->render();
+
+    return $getRecords; // Return HTML content directly
+}
 
     /**
      * Search in messenger

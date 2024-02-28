@@ -7,15 +7,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Interest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Response;
+use App\Models\ChMessage as Message;
+use App\Models\ChFavorite as Favorite;
+use Chatify\Facades\ChatifyMessenger as Chatify;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MatchController extends Controller
 {
+    
     public function startMatching(Request $request)
     {
         
         $validator = Validator::make($request->all(), [
-            'age' => 'required|integer|min:18',
+            'age' => 'required|integer|min:18|max:100',
             'interest' => 'required|array|min:1|max:5',
+            'gender' => 'required|in:male,female,others',
         ]);
 
         if ($validator->fails()) {
@@ -39,6 +49,7 @@ class MatchController extends Controller
             $query->whereIn('interests.id', $interestIds);
         })
             ->where('users.age', $request->age) 
+            ->where('users.gender', $request->gender)
             ->with('interests')
             ->get();
 
@@ -66,6 +77,7 @@ class MatchController extends Controller
                         'id' => $matchingUser->id,
                         'name' => $matchingUser->name,
                         'age' => $matchingUser->age,
+                        'gender' => $matchingUser->gender,
                         'interests' => $filteredInterests,
                         'shared_interests' => $sharedInterests,
                     ],
