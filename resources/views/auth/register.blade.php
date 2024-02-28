@@ -15,23 +15,20 @@
                         <p>Please sign up for your account</p>
                         <div class="form-outline mb-4 mt-3">
                             <x-input-label for="name" :value="__('Username')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name"
-                                :value="old('name')" required autofocus autocomplete="name" />
+                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
                         <div class="form-outline mb-4">
                             <x-input-label for="email" :value="__('Email')" />
-                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
-                                :value="old('email')" required autocomplete="username" />
+                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
 
                         <div class="form-outline mb-4">
                             <x-input-label for="password" :value="__('Password')" />
 
-                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
-                                required autocomplete="new-password" />
+                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
 
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
@@ -39,18 +36,17 @@
                         <div class="form-outline mb-4">
                             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-                            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+                            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
 
                             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                         </div>
 
                         <div class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" id="termsCheckbox">
+                            <input class="form-check-input" type="checkbox" id="termsCheckbox" name="termsCheckbox" required>
                             <label class="form-check-label" for="termsCheckbox">
-                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal"
-                                    style="color:#4158D0">Terms and Conditions</a>
+                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" style="color:#4158D0">Terms and Conditions</a>
                             </label>
+                            <x-input-error :messages="$errors->get('termsCheckbox')" class="mt-2" />
                         </div>
 
                         <div class="text-center pt-1 mb-3 pb-1">
@@ -62,21 +58,17 @@
 
                         <div class="d-flex align-items-center justify-content-center">
                             <p class="mb-0 me-2">Already have an account?</p>
-                            <a href="{{ route('login') }}"><button type="button"
-                                    class="btn btn-outline-custom-danger">Log In</button></a>
+                            <a href="{{ route('login') }}"><button type="button" class="btn btn-outline-custom-danger">Log In</button></a>
                         </div>
                     </form>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel"
-                        aria-hidden="true">
+                    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="termsModalLabel"
-                                        style="font-weight: bold; font-size: 23px">Terms and Conditions</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                    <h5 class="modal-title" id="termsModalLabel" style="font-weight: bold; font-size: 23px">Terms and Conditions</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <!-- terms and conditions content -->
@@ -187,8 +179,7 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-custom-danger"
-                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-outline-custom-danger" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -238,11 +229,11 @@
 
     {{-- <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+    {{ __('Already registered?') }}
+    </a>
 
-            <x-primary-button class="ml-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div> --}}
+    <x-primary-button class="ml-4">
+        {{ __('Register') }}
+    </x-primary-button>
+    </div> --}}
 </x-guest-layout>
